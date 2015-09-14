@@ -177,7 +177,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_model_serializers (~> 0.10.0.rc1)
+  active_model_serializers (~> 0.10.0.rc2)
   bootstrap-sass
   byebug
   coffee-rails (~> 4.1.0)

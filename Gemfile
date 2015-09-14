@@ -49,5 +49,5 @@ end
 gem 'bootstrap-sass'
 
 gem 'rails-api'
-gem 'active_model_serializers', '~> 0.10.0.rc1'
+gem 'active_model_serializers', '~> 0.10.0.rc2'
 

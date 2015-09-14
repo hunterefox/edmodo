@@ -1,23 +1,20 @@
-=begin
-Controller for Homeworks.
 
-To create homework via console: curl -H "Content-Type:application/json; charset=utf-8" -d '{"title":"HW 1", "question": "Question one", "due": "2015-09-14 16:15:50"}' http://localhost:3000/api/v1/homeworks?authenticate_user=teacher
-=end
-class Api::V1::HomeworksController < Api::V1::BaseController
+# Create homework: curl -H "Content-Type:application/json; charset=utf-8" -d '{"title":"HW 1", "question": "Question one", "due": "2015-09-14 16:15:50"}' http://localhost:3000/api/v1/homeworks
+class Api::V1::HomeworkAssignmentsController < Api::V1::BaseController
   before_action :set_homework, only: [:show, :update, :destroy]
   # Teachers can only cud homework.
   before_action :current_user_is_teacher, only: [:create, :update, :destroy]
 
   # GET /homework
   def index
-    @homeworks = Homework.all
+    @homework = Homework.all
 
-    render json: @homeworks, each_serializer: HomeworkSerializer
+    render json: @homework
   end
 
   # GET /homework/1
   def show
-    render json: @homework
+    render json: @user
   end
 
  # POST /homeworks

@@ -3,9 +3,9 @@ class Api::V1::UsersController < Api::V1::BaseController
 
   # GET /users
   def index
-    @users = user.all
+    @user = User.all
 
-    render json: @users
+    render json: @user, each_serializer: UserSerializer
   end
 
   # GET /users/1
