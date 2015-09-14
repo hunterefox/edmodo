@@ -16,6 +16,8 @@ class ApplicationController < ActionController::Base
   # Private: Returns the current logged in User.
   def current_user
     @current_user ||= session[:user_id] && User.find(session[:user_id])
+    # For API access, allow ?authenticate_user=username since no passwords
+    @current_user ||= params[:authenticate_user] && (User.find_by username: params[:authenticate_user])
   end
   helper_method :current_user
 end
