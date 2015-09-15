@@ -3,6 +3,7 @@
 class Api::V1::Homeworks::AssignmentsController < Api::V1::HomeworksController
   before_action :set_homework_assignment, only: [:destroy]
   before_action :set_homework
+  before_action :current_user_is_teacher, only: [:create, :destroy]
 
   # GET /homeworks/homework_id/assignments
   def index
