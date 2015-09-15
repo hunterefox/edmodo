@@ -36,4 +36,10 @@ class Api::V1::BaseController < ApplicationController
       head(403)
     end
   end
+
+  def current_user_is_student
+    if !current_user || current_user.role != 'student'
+      head(403)
+    end
+  end
 end

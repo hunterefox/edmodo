@@ -7,9 +7,9 @@ class Api::V1::Homeworks::AssignmentsController < Api::V1::HomeworksController
 
   # GET /homeworks/homework_id/assignments
   def index
-    @homeworksAssigments = HomeworkAssignment.where(homework_id: params[:homework_id])
+    @homeworksAssignments = HomeworkAssignment.where(homework_id: params[:homework_id])
 
-    render json: @homeworksAssigments, each_serializer: Api::V1::HomeworkAssignmentSerializer
+    render json: @homeworksAssignments, each_serializer: Api::V1::HomeworkAssignmentSerializer
   end
 
  # POST /homeworks/homework_id/assignments

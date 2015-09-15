@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       end
       resources :homeworks, only: [:index, :create, :show, :update, :destroy] do
         resources :assignments, :module => 'homeworks', only: [:index, :create, :destroy]
+        resources :answers, :module => 'homeworks', only: [:index, :create]
       end
     end
   end
