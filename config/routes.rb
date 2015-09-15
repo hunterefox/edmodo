@@ -15,7 +15,9 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       resources :users, only: [:index, :show]
-      resources :homeworks, only: [:index, :create, :show, :update, :destroy]
+      resources :homeworks, only: [:index, :create, :show, :update, :destroy] do
+        resources :assignments, :module => 'homeworks', only: [:index, :create, :destroy]
+      end
     end
   end
 

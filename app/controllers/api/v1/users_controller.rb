@@ -5,12 +5,12 @@ class Api::V1::UsersController < Api::V1::BaseController
   def index
     @user = User.all
 
-    render json: @user, each_serializer: UserSerializer
+    render json: @user, each_serializer: Api::V1::UserSerializer
   end
 
   # GET /users/1
   def show
-    render json: @user
+    render json: @user, serializer: Api::V1::UserSerializer
   end
 
   private
