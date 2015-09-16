@@ -48,6 +48,9 @@ end
 
 gem 'bootstrap-sass'
 
+# Used for api functionality
 gem 'rails-api'
 gem 'active_model_serializers', '~> 0.10.0.rc2'
 
+# Angular
+gem 'angularjs-rails'
