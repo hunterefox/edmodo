@@ -1,5 +1,5 @@
 # Controller for Answers.
-# To create homework via console: curl -H "Content-Type:application/json; charset=utf-8" -d '{"user_id":2,"answerText":"My HW answer"}' http://localhost:3000/api/v1/homeworks/1/answers?authenticate_user=student
+# To create homework via console: curl -H "Content-Type:application/json; charset=utf-8" -d '{answerText":"My HW answer"}' http://localhost:3000/api/v1/homeworks/1/answers?authenticate_user=student
 class Api::V1::Homeworks::AnswersController < Api::V1::BaseController
   before_action :set_homework
   before_action :current_user_is_student, only: [:create]
@@ -17,7 +17,10 @@ class Api::V1::Homeworks::AnswersController < Api::V1::BaseController
     # answerText instead of answer for the text of the answer
     params[:answer][:answer] = params[:answer][:answerText]
     params[:answer].delete(:answerText)
-    @homeworkAnswer = HomeworkAnswer.new(homework_answer_params.merge(homework_id: params[:homework_id]))
+    # Only allow current user to create answer in it's name.
+    params[:answer][:user_id] = current_user.user_id
+    params[:answer][:homework_id] = params[:homework_id]
+    @homeworkAnswer = HomeworkAnswer.new(homework_answer_params)
 
     if @homeworkAnswer.save
       render json: @homeworkAnswer, status: :created, serializer: Api::V1::HomeworkAnswerSerializer

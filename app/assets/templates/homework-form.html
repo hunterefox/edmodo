@@ -1,0 +1,16 @@
+<form novalidate class="homework-form">
+  <div class="form-group">
+    <label>Title</label>
+    <input type="text" class="form-control" ng-model="homework.title" />
+  </div>
+  <div class="form-group">
+    <label>Question</label>
+    <textarea class="form-control" rows="4" cols="50" ng-model="homework.question"></textarea>
+  </div>
+  <div class="form-group">
+    <label>Due Date</label>
+    <input type="datetime" class="form-control" ng-model="homework.due" placeholder="2015-09-14 16:15:50">
+    <p class="help-block">Format: 2015-09-14 16:15:50</p>
+  </div>
+  <button ng-click="submit()">Create Homework</button>
+</form>

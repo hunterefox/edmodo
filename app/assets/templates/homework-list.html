@@ -1,0 +1,44 @@
+<table class="table table-striped">
+  <tr><th>Title</th><th>Due Date</th><th>Created</th></tr>
+  <tr ng-repeat="(key, homework) in homeworks">
+    <td>
+      <a data-toggle="modal" data-target="#homework-list-{{ homework.id }}">
+        {{ homework.title }}
+      </a>
+      <!-- Modal -->
+      <div class="modal fade" id="homework-list-{{ homework.id }}" tabindex="-1" role="dialog" aria-labelledby="Detials for {{ homework.title }}">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">{{ homework.title }}</h4>
+            </div>
+            <div class="modal-body">
+              <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#question-tabs-{{ homework.id }}" aria-controls="question" role="tab" data-toggle="tab">Question</a></li>
+                <li role="presentation"><a href="#answer-form-tabs-{{ homework.id }}"  aria-controls="answer form" role="tab" data-toggle="tab" ng-show="currentUserIs('student')">Answer Form</a></li>
+                <li role="presentation"><a href="#answers-tabs-{{ homework.id }}" aria-controls="messages" role="tab" data-toggle="tab">Answers</a></li>
+              </ul>
+              <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="question-tabs-{{ homework.id }}">
+                  {{ homework.question }}
+                  <br />
+                  <br />
+                  Due: {{ homework.due | date : format : medium}}
+                </div>
+                <div role="tabpanel" class="tab-pane active" id="answer-form-tabs-{{ homework.id }}" ng-show="currentUserIs('student')" >
+                 <div homework-answer-form id="homework-answer-form-wrapper-{{ homework.id }}" homework-object="homework"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane active" id="answers-tabs-{{ homework.id }}">
+                  [Answers]
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </td>
+    <td>{{ homework.due | date : format : short}}</td>
+    <td>{{ homework.created_at  | date : format : short }}</td>
+  </tr>
+</table>

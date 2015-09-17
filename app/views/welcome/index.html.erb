@@ -3,5 +3,14 @@
     Homework
   <% end %>
 <% end %>
-
-<p class="lead">Find me in app/views/welcome/index.html.erb</p>
+<div ng-app="components">
+  <div id="alert-area">
+  </div>
+  <div ng-controller="hwController">
+    <a class="btn btn-primary" role="button" data-toggle="collapse" href="#homework-form-wrapper" aria-expanded="false" aria-controls="homework-form-wrapper" ng-show="currentUserIs('teacher')">
+      Add Homework
+    </a>
+    <div homework-form id="homework-form-wrapper" ng-show="currentUserIs('teacher')" class="collapse"></div>
+    <div homework-list></div>
+  </div>
+</div>

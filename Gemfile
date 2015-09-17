@@ -49,8 +49,10 @@ end
 gem 'bootstrap-sass'
 
 # Used for api functionality
-gem 'rails-api'
 gem 'active_model_serializers', '~> 0.10.0.rc2'
 
 # Angular
 gem 'angularjs-rails'
+gem 'angular-rails-templates'
+# http://stackoverflow.com/questions/29709334/angular-rails-templates-just-not-working
+gem 'sprockets', '2.12.3'
