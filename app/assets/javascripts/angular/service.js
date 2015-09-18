@@ -192,4 +192,22 @@ angular.module('hwServices', [])
     );
     return promise;
   };
+  this.getHomeworkAssignmentsForUser = function (user) {
+    var deferred = $q.defer();
+    var promise = deferred.promise;
+    $.get(
+      // Callback URL.
+      '/api/v1/users/' + user.id + '/assignments?authenticate_user=' + current_user.username,
+      function(result) {
+        if (!result) {
+          deferred.reject('Unable to fetch homework assignments.');
+          $('#alert-area').append('<div class="alert alert-warning" role="alert">Unable to fetch assignments</div>');
+        }
+        else {
+          deferred.resolve(result);
+        }
+      }
+    );
+    return promise;
+  };
 })

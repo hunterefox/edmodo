@@ -13,13 +13,15 @@ angular.module('components', ['templates', 'hwServices'])
   .controller('hwController', ['$scope', 'hwCommon', function($scope, hwCommon) {
     $scope.currentUserIs = hwCommon.currentUserIs;
   }])
-  .directive('homeworkForm', function(homeworkService) {
+  .directive('homeworkForm', function(homeworkService, $rootScope) {
     return {
       scope: {},
       link: function(scope, element, attrs) {
         scope.homework = {};
         scope.submit = function() {
-          homeworkService.saveHomework(scope.homework);
+          homeworkService.saveHomework(scope.homework).then(function(homework) {
+            $rootScope.$broadcast('homeworkAdded', homework);
+          })
         }
       },
       templateUrl: 'homework-form.html',
@@ -95,11 +97,37 @@ angular.module('components', ['templates', 'hwServices'])
       scope: {},
       link: function(scope, element, attrs) {
         scope.currentUserIs = hwCommon.currentUserIs;
-        homeworkService.getHomework().then( function(result) {
-          scope.homeworks = result;
+        if (scope.currentUserIs('student')) {
+          // Limit the list to assigned
+          scope.homeworks = [];
+          homeworkService.getHomeworkAssignmentsForUser(hwCommon.currentUser()).then(function(result) {
+            for (var key in result) {
+              scope.homeworks.push(result[key].homework);
+            }
+          });
+        }
+        else {
+          homeworkService.getHomework().then( function(result) {
+            scope.homeworks = result;
+          });
+        }
+        scope.$on('homeworkAdded', function (event, data) {
+          scope.homeworks.push(data);
         });
       },
       templateUrl: 'homework-list.html',
+    };
+  })
+  .directive('userList', function(homeworkService, hwCommon) {
+    return {
+      scope: {},
+      link: function(scope, element, attrs) {
+        scope.currentUserIs = hwCommon.currentUserIs;
+        homeworkService.getUsers().then( function(result) {
+          scope.users = result;
+        });
+      },
+      templateUrl: 'user-list.html',
     };
   })
   .directive('homeworkModal', function(homeworkService, hwCommon) {

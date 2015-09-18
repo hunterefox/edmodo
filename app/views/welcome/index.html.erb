@@ -7,10 +7,22 @@
   <div id="alert-area">
   </div>
   <div ng-controller="hwController">
-    <a class="btn btn-primary" role="button" data-toggle="collapse" href="#homework-form-wrapper" aria-expanded="false" aria-controls="homework-form-wrapper" ng-show="currentUserIs('teacher')">
-      Add Homework
-    </a>
-    <div homework-form id="homework-form-wrapper" ng-show="currentUserIs('teacher')" class="collapse"></div>
-    <div homework-list></div>
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#homeworks" aria-controls="question" role="tab" data-toggle="tab">Homeworks</a></li>
+      <li role="presentation" class=""><a href="#homework-form" aria-controls="question" role="tab" data-toggle="tab" ng-if="currentUserIs('teacher')">Add Homework</a></li>
+
+      <li role="presentation" class=""><a href="#users" aria-controls="question" role="tab" data-toggle="tab" ng-if="currentUserIs('teacher')">Users</a></li>
+    </ul>
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="homeworks">
+        <div homework-list></div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="homework-form">
+        <div homework-form ng-if="currentUserIs('teacher')"></div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="users">
+        <div user-list ng-if="currentUserIs('teacher')"></div>
+      </div>
+    </div>
   </div>
 </div>

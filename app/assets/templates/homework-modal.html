@@ -12,8 +12,8 @@
       <div class="modal-body">
         <ul class="nav nav-tabs" role="tablist">
           <li role="presentation" class="active"><a href="#question-tabs-{{ homework.id }}" aria-controls="question" role="tab" data-toggle="tab">Question</a></li>
-          <li role="presentation"><a href="#assignments-form-tabs-{{ homework.id }}"  aria-controls="answer form" role="tab" data-toggle="tab" ng-show="currentUserIs('teacher')">Assignments</a></li>
-          <li role="presentation"><a href="#answer-form-tabs-{{ homework.id }}"  aria-controls="answer form" role="tab" data-toggle="tab" ng-show="currentUserIs('student')">Answer Form</a></li>
+          <li role="presentation"><a href="#assignments-form-tabs-{{ homework.id }}"  aria-controls="answer form" role="tab" data-toggle="tab" ng-if="currentUserIs('teacher')">Assignments</a></li>
+          <li role="presentation"><a href="#answer-form-tabs-{{ homework.id }}"  aria-controls="answer form" role="tab" data-toggle="tab" ng-if="currentUserIs('student')">Answer Form</a></li>
           <li role="presentation"><a href="#answers-tabs-{{ homework.id }}" aria-controls="messages" role="tab" data-toggle="tab">Answers</a></li>
         </ul>
         <div class="tab-content">
@@ -23,10 +23,10 @@
             <br />
             Due: {{ homework.due | date : format : medium}}
           </div>
-          <div role="tabpanel" class="tab-pane" id="assignments-form-tabs-{{ homework.id }}" ng-show="currentUserIs('teacher')" >
+          <div role="tabpanel" class="tab-pane" id="assignments-form-tabs-{{ homework.id }}" ng-if="currentUserIs('teacher')" >
            <div homework-assignment-form homework="homework"></div>
           </div>
-          <div role="tabpanel" class="tab-pane" id="answer-form-tabs-{{ homework.id }}" ng-show="currentUserIs('student')" >
+          <div role="tabpanel" class="tab-pane" id="answer-form-tabs-{{ homework.id }}" ng-if="currentUserIs('student')" >
            <div homework-answer-form id="homework-answer-form-wrapper-{{ homework.id }}" homework="homework"></div>
           </div>
           <div role="tabpanel" class="tab-pane" id="answers-tabs-{{ homework.id }}">

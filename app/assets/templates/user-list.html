@@ -1,0 +1,8 @@
+<table class="table table-striped">
+  <tr><th>username</th><th>Role</th><th>Created at</th></tr>
+  <tr ng-repeat="(key, user) in users">
+    <td>{{ user.username }}</td>
+    <td>{{ user.role }}</td>
+    <td>{{ user.created_at  | date : format : short }}</td>
+  </tr>
+</table>
