@@ -11,6 +11,13 @@ class Api::V1::Homeworks::AnswersController < Api::V1::BaseController
     render json: @homeworksAnswers, each_serializer: Api::V1::HomeworkAnswerSerializer
   end
 
+  # GET /homeworks/homework_id/answers/user_id
+  def show
+    @homeworksAnswers = HomeworkAnswer.where(homework_id: params[:homework_id], user_id: params[:id])
+
+    render json: @homeworksAnswers, each_serializer: Api::V1::HomeworkAnswerSerializer
+  end
+
  # POST /homeworks/homework_id/answers
   def create
     # Paramater conflict messed with the auto reformating of params to we use
@@ -18,7 +25,7 @@ class Api::V1::Homeworks::AnswersController < Api::V1::BaseController
     params[:answer][:answer] = params[:answer][:answerText]
     params[:answer].delete(:answerText)
     # Only allow current user to create answer in it's name.
-    params[:answer][:user_id] = current_user.user_id
+    params[:answer][:user_id] = current_user.id
     params[:answer][:homework_id] = params[:homework_id]
     @homeworkAnswer = HomeworkAnswer.new(homework_answer_params)
 

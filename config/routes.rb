@@ -16,10 +16,11 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users, only: [:index, :show] do
         resources :assignments, :module => 'users', only: [:index]
+        resources :answers, :module => 'users', only: [:index]
       end
       resources :homeworks, only: [:index, :create, :show, :update, :destroy] do
         resources :assignments, :module => 'homeworks', only: [:index, :create, :destroy]
-        resources :answers, :module => 'homeworks', only: [:index, :create]
+        resources :answers, :module => 'homeworks', only: [:index, :show, :create]
       end
     end
   end

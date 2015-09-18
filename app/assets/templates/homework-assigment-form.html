@@ -1,0 +1,6 @@
+<form novalidate class="homework-assignment-form">
+  <div class="form-group" ng-repeat="user in users">
+    <input type="checkbox" ng-model="assignedUsers[user.id]">{{ user.username }}<br>
+  </div>
+  <button ng-click="submit()">Update Assignments</button>
+</form>

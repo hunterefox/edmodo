@@ -24,9 +24,10 @@ class Api::V1::Homeworks::AssignmentsController < Api::V1::HomeworksController
 
   end
 
-  # DELETE /homeworks/x/assigments/y
+  # DELETE /homeworks/homework_id/assigments/user_id
   def destroy
     @homeworkAssignment.destroy
+    render json: {success: true}
   end
 
   private
@@ -36,7 +37,7 @@ class Api::V1::Homeworks::AssignmentsController < Api::V1::HomeworksController
     end
 
     def set_homework_assignment
-      @homeworkAssignment = Homework.find(params[:id])
+      @homeworkAssignment = HomeworkAssignment.where(homework_id: params[:homework_id], user_id: params[:id]).take
     end
 
     # Only allow a trusted parameter "white list" through.
