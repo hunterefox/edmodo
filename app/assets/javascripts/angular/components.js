@@ -97,8 +97,8 @@ angular.module('components', ['templates', 'hwServices'])
       scope: {},
       link: function(scope, element, attrs) {
         scope.currentUserIs = hwCommon.currentUserIs;
+        // If user is a student, only show their assigned homeworks.
         if (scope.currentUserIs('student')) {
-          // Limit the list to assigned
           scope.homeworks = [];
           homeworkService.getHomeworkAssignmentsForUser(hwCommon.currentUser()).then(function(result) {
             for (var key in result) {
@@ -106,11 +106,13 @@ angular.module('components', ['templates', 'hwServices'])
             }
           });
         }
+        // Teacher (or unknown role), show all homeworks.
         else {
           homeworkService.getHomework().then( function(result) {
             scope.homeworks = result;
           });
         }
+        // If new homework added, add to the homework list.
         scope.$on('homeworkAdded', function (event, data) {
           scope.homeworks.push(data);
         });
@@ -137,24 +139,37 @@ angular.module('components', ['templates', 'hwServices'])
       },
       link: function(scope, element, attrs) {
         scope.currentUserIs = hwCommon.currentUserIs;
+        scope.answersUsers = {}
         // Students only see their own answers.
         if (scope.currentUserIs('student')) {
           homeworkService.getHomeworkAnswersForStudent(scope.homework, hwCommon.currentUser()).then(function(result) {
             scope.answers = result;
+          });
+          scope.$on('answerAdded', function (event, data) {
+            scope.answers.push(data);
           });
         }
         // Teachers see all answers.
         else if (scope.currentUserIs('teacher')) {
           homeworkService.getHomeworkAnswers(scope.homework).then(function(result) {
             scope.answers = result;
+            for (var key in scope.answers) {
+              var answer = scope.answers[key]
+              if (!scope.answersUsers[answer.user.id]) {
+                scope.answersUsers[answer.user.id] = answer.user;
+              }
+            }
           });
+          scope.answerUser = {user_id : ''};
+          scope.testCompare = function (actual, expected) {
+            console.log('hereee');
+            console.log(actual);
+            console.log(expected);
+          }
         }
         else {
           scope.answers = [];
         }
-        scope.$on('answerAdded', function (event, data) {
-          scope.answers.push(data);
-        });
       },
       templateUrl: 'homework-modal.html',
     };

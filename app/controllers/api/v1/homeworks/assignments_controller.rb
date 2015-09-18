@@ -14,12 +14,15 @@ class Api::V1::Homeworks::AssignmentsController < Api::V1::HomeworksController
 
  # POST /homeworks/homework_id/assignments
   def create
-    @homeworkAssignment = HomeworkAssignment.new(homework_assignment_params.merge(homework_id: params[:homework_id]))
+    # Prevent adding an existing assignment.
+    if !load_homework_assignment( params[:homework_id],  params[:id])
+      @homeworkAssignment = HomeworkAssignment.new(homework_assignment_params.merge(homework_id: params[:homework_id]))
 
-    if @homeworkAssignment.save
-      render json: @homeworkAssignment, status: :created, serializer: Api::V1::HomeworkAssignmentSerializer
-    else
-      render json: @homeworkAssignment.errors, status: :unprocessable_entity
+      if @homeworkAssignment.save
+        render json: @homeworkAssignment, status: :created, serializer: Api::V1::HomeworkAssignmentSerializer
+      else
+        render json: @homeworkAssignment.errors, status: :unprocessable_entity
+      end
     end
 
   end
@@ -36,8 +39,13 @@ class Api::V1::Homeworks::AssignmentsController < Api::V1::HomeworksController
       @homework = Homework.find(params[:homework_id])
     end
 
+    # Load a homework assignment by user id and homework id.
+    def load_homework_assignment(homework_id, user_id)
+      return HomeworkAssignment.where(homework_id: homework_id, user_id: user_id).take
+    end
+
     def set_homework_assignment
-      @homeworkAssignment = HomeworkAssignment.where(homework_id: params[:homework_id], user_id: params[:id]).take
+      @homeworkAssignment = load_homework_assignment(params[:homework_id], params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.

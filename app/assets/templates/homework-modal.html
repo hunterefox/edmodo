@@ -30,11 +30,16 @@
            <div homework-answer-form id="homework-answer-form-wrapper-{{ homework.id }}" homework="homework"></div>
           </div>
           <div role="tabpanel" class="tab-pane" id="answers-tabs-{{ homework.id }}">
+            <select ng-model="answerUser.user_id" ng-if="currentUserIs('teacher')">
+              <option value="">-- choose user --</option>
+              <option ng-repeat="(id, user) in answersUsers" value="{{id}}">{{user.username}}</option>
+            </select>
             <table class="table table-striped">
-              <tr><th>Answer</th><th>Created</th></tr>
-              <tr ng-repeat="(key, answer) in answers">
+              <tr><th>Answer</th><th>Created</th><th ng-if="currentUserIs('teacher')">User</th></tr>
+              <tr ng-repeat="answer in answers | filter:answerUser">
                 <td>{{ answer.answer }}</td>
                 <td>{{ answer.created_at  | date : format : short }}</td>
+                <td ng-if="currentUserIs('teacher')">{{ answer.user.username  }}</td>
               </tr>
             </table>
           </div>

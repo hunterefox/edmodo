@@ -7,3 +7,5 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 FactoryGirl.create(:teacher, username: 'teacher')
 FactoryGirl.create(:student, username: 'student')
+FactoryGirl.create(:student, username: 'student2')
+FactoryGirl.create(:student, username: 'student3')
