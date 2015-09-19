@@ -7,6 +7,13 @@ angular.module('components', ['templates', 'hwServices'])
       },
       currentUser: function() {
         return current_user ? current_user : {}
+      },
+      currentUserCanAnswer: function(homework) {
+        var currentUser = current_user ? current_user : {};
+        if (current_user && current_user.role == 'student') {
+          return !homework.due || Date.parse(homework.due) > Date.now();
+        }
+        return false;
       }
     }
   }])
@@ -110,6 +117,7 @@ angular.module('components', ['templates', 'hwServices'])
         else {
           homeworkService.getHomework().then( function(result) {
             scope.homeworks = result;
+            console.log(result)
           });
         }
         // If new homework added, add to the homework list.
@@ -158,6 +166,7 @@ angular.module('components', ['templates', 'hwServices'])
       },
       link: function(scope, element, attrs) {
         scope.currentUserIs = hwCommon.currentUserIs;
+        scope.currentUserCanAnswer = hwCommon.currentUserCanAnswer;
         // Students only see their own answers.
         if (scope.currentUserIs('student')) {
           homeworkService.getHomeworkAnswersForStudent(scope.homework, hwCommon.currentUser()).then(function(result) {

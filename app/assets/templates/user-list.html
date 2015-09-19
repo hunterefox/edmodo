@@ -3,6 +3,6 @@
   <tr ng-repeat="(key, user) in users">
     <td>{{ user.username }}</td>
     <td>{{ user.role }}</td>
-    <td>{{ user.created_at  | date : format : short }}</td>
+    <td>{{ user.created_at | date:'medium' }}</td>
   </tr>
 </table>

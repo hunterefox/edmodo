@@ -27,7 +27,8 @@
            <div homework-assignment-form homework="homework"></div>
           </div>
           <div role="tabpanel" class="tab-pane" id="answer-form-tabs-{{ homework.id }}" ng-if="currentUserIs('student')" >
-           <div homework-answer-form id="homework-answer-form-wrapper-{{ homework.id }}" homework="homework"></div>
+            <div homework-answer-form id="homework-answer-form-wrapper-{{ homework.id }}" homework="homework" ng-if="currentUserCanAnswer(homework)"></div>
+            <div ng-if="!currentUserCanAnswer(homework)">Homework is past due, answers cannot be submitted.</div>
           </div>
           <div role="tabpanel" class="tab-pane" id="answers-tabs-{{ homework.id }}" ng-if="answers">
             <div homework-answer-list answers="answers"></div>

@@ -6,7 +6,7 @@
   <tr><th>Answer</th><th>Created</th><th ng-if="currentUserIs('teacher')">User</th></tr>
   <tr ng-repeat="answer in answers | filter:answerUser">
     <td>{{ answer.answer }}</td>
-    <td>{{ answer.created_at  | date : format : short }}</td>
+    <td>{{ answer.created_at | date:'medium' }}</td>
     <td ng-if="currentUserIs('teacher')">{{ answer.user.username  }}</td>
   </tr>
 </table>

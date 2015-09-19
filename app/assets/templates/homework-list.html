@@ -4,7 +4,7 @@
     <td>
       <div homework-modal homework="homework"></div>
     </td>
-    <td>{{ homework.due | date : format : short}}</td>
-    <td>{{ homework.created_at  | date : format : short }}</td>
+    <td>{{ homework.due |  date:'medium' }}</td>
+    <td>{{ homework.created_at  |  date:'medium' }}</td>
   </tr>
 </table>
