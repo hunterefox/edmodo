@@ -1,8 +1,9 @@
-angular.module('hwServices', [])
-
 /**
- * Services that can be used for any node object.
+ * @file
+ * Provides a service for quering the api.
  */
+
+angular.module('hwServices', [])
 .service('homeworkService', function($q) {
   var self = this;
   /**
@@ -13,6 +14,9 @@ angular.module('hwServices', [])
    *    title
    *    question
    *    due, example 2015-09-14 16:15:50
+   *
+   * @return
+   *  A promise object that will resolve to the new homework.
    */
   this.saveHomework = function (homework) {
     var deferred = $q.defer();
@@ -35,9 +39,14 @@ angular.module('hwServices', [])
     return promise;
   };
   /**
-   * Saves a homework.
+   * Saves a homework answer.
    *
    * @param homeworkAnswer
+   *   Answer should contain the keys:
+   *    answerText
+   *
+   * @return
+   *  A promise object that will resolve to the new answer.
    */
   this.saveHomeworkAnswer = function (homeworkAnswer) {
     var deferred = $q.defer();
@@ -61,6 +70,14 @@ angular.module('hwServices', [])
   };
   /**
    * Adds a user as assigned to a homework.
+   *
+   * @param homework
+   *   A homework object including id.
+   * @param userId
+   *   The ID of the user.
+   *
+   * @return
+   *  A promise object that will resolve to the new assignment.
    */
   this.assignUser = function (homework, userId) {
     var deferred = $q.defer();
@@ -83,6 +100,14 @@ angular.module('hwServices', [])
   };
   /**
    * Removes a user as assigned to a homework.
+   *
+   * @param homework
+   *   A homework object including id.
+   * @param userId
+   *   The ID of the user.
+   *
+   * @return
+   *  A promise object that will resolve to the deleted message.
    */
   this.unassignUser = function (homework, userId) {
     var deferred = $q.defer();
@@ -102,6 +127,12 @@ angular.module('hwServices', [])
     });
     return promise;
   };
+  /**
+   * Get all users.
+   *
+   * @return
+   *  A promise object that will resolve to all users.
+   */
   this.getUsers = function () {
     var deferred = $q.defer();
     var promise = deferred.promise;
@@ -120,6 +151,12 @@ angular.module('hwServices', [])
     );
     return promise;
   };
+  /**
+   * Get all homework.
+   *
+   * @return
+   *  A promise object that will resolve to all homework.
+   */
   this.getHomework = function () {
     var deferred = $q.defer();
     var promise = deferred.promise;
@@ -138,12 +175,23 @@ angular.module('hwServices', [])
     );
     return promise;
   };
-  this.getHomeworkAnswersForStudent = function (homework, currentUser) {
+  /**
+   * Get all answers for a specific student for a specific homework.
+   *
+   * @param homework
+   *   A homework object including id.
+   * @param student
+   *   A student user object including id.
+   *
+   * @return
+   *  A promise object that will resolve to all answers by student for a homework.
+   */
+  this.getHomeworkAnswersForStudent = function (homework, student) {
     var deferred = $q.defer();
     var promise = deferred.promise;
     $.get(
       // Callback URL.
-      '/api/v1/homeworks/' + homework.id + '/answers/' + currentUser.id + '?authenticate_user=' + current_user.username,
+      '/api/v1/homeworks/' + homework.id + '/answers/' + student.id + '?authenticate_user=' + current_user.username,
       function(result) {
         if (!result) {
           deferred.reject('Unable to fetch homework answers.');
@@ -156,6 +204,15 @@ angular.module('hwServices', [])
     );
     return promise;
   };
+  /**
+   * Get all answers for a homework
+   *
+   * @param homework
+   *   A homework object including id.
+   *
+   * @return
+   *  A promise object that will resolve to all answers for a homework.
+   */
   this.getHomeworkAnswers = function (homework) {
     var deferred = $q.defer();
     var promise = deferred.promise;
@@ -174,6 +231,17 @@ angular.module('hwServices', [])
     );
     return promise;
   };
+  /**
+   * Get all assignments for a homework.
+   *
+   * Assignments are an object with both user and homework information.
+   *
+   * @param homework
+   *   A homework object including id.
+   *
+   * @return
+   *  A promise object that will resolve to all assignments for a homework.
+   */
   this.getHomeworkAssignments = function (homework) {
     var deferred = $q.defer();
     var promise = deferred.promise;
@@ -192,6 +260,17 @@ angular.module('hwServices', [])
     );
     return promise;
   };
+  /**
+   * Get all assignments for a specific user.
+   *
+   * Assignments are an object with both user and homework information.
+   *
+   * @param user
+   *   A user object including id.
+   *
+   * @return
+   *  A promise object that will resolve to all assignments for a user.
+   */
   this.getHomeworkAssignmentsForUser = function (user) {
     var deferred = $q.defer();
     var promise = deferred.promise;

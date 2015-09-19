@@ -31,12 +31,14 @@ class Api::V1::BaseController < ApplicationController
     @current_user ||= params[:authenticate_user] && (User.find_by username: params[:authenticate_user])
   end
 
+  # Test if current user is a teacher. Used to restrict access to teachers.
   def current_user_is_teacher
     if !current_user || current_user.role != 'teacher'
       head(403)
     end
   end
 
+  # Test if current user is a student. Used to restrict access to students.
   def current_user_is_student
     if !current_user || current_user.role != 'student'
       head(403)

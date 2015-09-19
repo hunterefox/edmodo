@@ -1,13 +1,47 @@
+/**
+ * @file
+ * Provides components that can be used to create homework functionality.
+ */
 
 angular.module('components', ['templates', 'hwServices'])
+  /**
+   * Provides shared functionality relating to current user.
+   *
+   * Current user is currently signed in user. It is provided to the front
+   * end via an object embeded on page.
+   */
   .factory('hwCommon', [function () {
     return {
+      /**
+       * Test if current user matches a given role (student or teacher).
+       *
+       * @param role
+       *   The string student or teacher.
+       *
+       * @return
+       *   BOOL based on if current user matches the role.
+       */
       currentUserIs: function (role) {
         return current_user && current_user.role == role;
       },
+      /**
+       * Returns the current user object.
+       */
       currentUser: function() {
         return current_user ? current_user : {}
       },
+      /**
+       * Tests if current user can answer a homework.
+       *
+       * Only homeworks that have a due date before current date can be answered.
+       * This constraint is currenly only enforced here in front end.
+       *
+       * @param homework
+       *   A homework object.
+       *
+       * @return
+       *   BOOL based on if current user can answer homework.
+       */
       currentUserCanAnswer: function(homework) {
         var currentUser = current_user ? current_user : {};
         if (current_user && current_user.role == 'student') {
@@ -20,6 +54,11 @@ angular.module('components', ['templates', 'hwServices'])
   .controller('hwController', ['$scope', 'hwCommon', function($scope, hwCommon) {
     $scope.currentUserIs = hwCommon.currentUserIs;
   }])
+  /**
+   * Provide a directive to show a homework form.
+   *
+   * Example <div homework-form></div>
+   */
   .directive('homeworkForm', function(homeworkService, $rootScope) {
     return {
       scope: {},
@@ -34,6 +73,11 @@ angular.module('components', ['templates', 'hwServices'])
       templateUrl: 'homework-form.html',
     };
   })
+  /**
+   * Provide a directive to show a homework answer form.
+   *
+   * Example <div homework-answer-form homework="homework"></div>
+   */
   .directive('homeworkAnswerForm', function(homeworkService, $rootScope) {
     return {
       scope: {
@@ -52,6 +96,11 @@ angular.module('components', ['templates', 'hwServices'])
       templateUrl: 'homework-answer-form.html',
     };
   })
+  /**
+   * Provide a directive to show a homework assignment form.
+   *
+   * Example <div homework-assignment-form homework="homework"></div>
+   */
   .directive('homeworkAssignmentForm', function(homeworkService, $rootScope) {
     return {
       scope: {
@@ -59,6 +108,8 @@ angular.module('components', ['templates', 'hwServices'])
       },
       link: function(scope, element, attrs) {
         scope.assignedUsers = {};
+        // Keeps track of users currently assigned so can figure out
+        // what assignments have changed.
         function updateAssignedUsersCurrent() {
           scope.assignedUsersCurrent = {}
           for (var key in scope.assignedUsers) {
@@ -99,6 +150,13 @@ angular.module('components', ['templates', 'hwServices'])
       templateUrl: 'homework-assigment-form.html',
     };
   })
+  /**
+   * Provide a directive to show a list of homework.
+   *
+   * For students, it will just show assigned homework. For teachers, all.
+   *
+   * Example <div homework-list></div>
+   */
   .directive('homeworkList', function(homeworkService, hwCommon) {
     return {
       scope: {},
@@ -128,6 +186,11 @@ angular.module('components', ['templates', 'hwServices'])
       templateUrl: 'homework-list.html',
     };
   })
+  /**
+   * Provide a directive to show a list of answers.
+   *
+   * Example <div homework-answer-list answers="answers"></div>
+   */
   .directive('homeworkAnswerList', function(homeworkService, hwCommon) {
     return {
       scope: {
@@ -147,6 +210,11 @@ angular.module('components', ['templates', 'hwServices'])
       templateUrl: 'homework-answer-list.html',
     };
   })
+  /**
+   * Provide a directive to show a list of users.
+   *
+   * Example <div user-list></div>
+   */
   .directive('userList', function(homeworkService, hwCommon) {
     return {
       scope: {},
@@ -159,6 +227,11 @@ angular.module('components', ['templates', 'hwServices'])
       templateUrl: 'user-list.html',
     };
   })
+  /**
+   * Provide a directive to provide a homework title that opens to more info.
+   *
+   * Example <div homework-modal homework="homework"></div>
+   */
   .directive('homeworkModal', function(homeworkService, hwCommon) {
     return {
       scope: {
@@ -173,7 +246,9 @@ angular.module('components', ['templates', 'hwServices'])
             scope.answers = result;
           });
           scope.$on('answerAdded', function (event, data) {
-            scope.answers.push(data);
+            if (data.homework_id == scope.homework.id) {
+              scope.answers.push(data);
+            }
           });
         }
         // Teachers see all answers.
