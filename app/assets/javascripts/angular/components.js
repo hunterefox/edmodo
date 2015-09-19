@@ -120,6 +120,25 @@ angular.module('components', ['templates', 'hwServices'])
       templateUrl: 'homework-list.html',
     };
   })
+  .directive('homeworkAnswerList', function(homeworkService, hwCommon) {
+    return {
+      scope: {
+        answers: '='
+      },
+      link: function(scope, element, attrs) {
+        scope.currentUserIs = hwCommon.currentUserIs;
+        scope.answersUsers = {}
+        scope.answerUser = {user_id : ''};
+        for (var key in scope.answers) {
+          var answer = scope.answers[key]
+          if (!scope.answersUsers[answer.user.id]) {
+            scope.answersUsers[answer.user.id] = answer.user;
+          }
+        }
+      },
+      templateUrl: 'homework-answer-list.html',
+    };
+  })
   .directive('userList', function(homeworkService, hwCommon) {
     return {
       scope: {},
@@ -139,7 +158,6 @@ angular.module('components', ['templates', 'hwServices'])
       },
       link: function(scope, element, attrs) {
         scope.currentUserIs = hwCommon.currentUserIs;
-        scope.answersUsers = {}
         // Students only see their own answers.
         if (scope.currentUserIs('student')) {
           homeworkService.getHomeworkAnswersForStudent(scope.homework, hwCommon.currentUser()).then(function(result) {
@@ -153,19 +171,7 @@ angular.module('components', ['templates', 'hwServices'])
         else if (scope.currentUserIs('teacher')) {
           homeworkService.getHomeworkAnswers(scope.homework).then(function(result) {
             scope.answers = result;
-            for (var key in scope.answers) {
-              var answer = scope.answers[key]
-              if (!scope.answersUsers[answer.user.id]) {
-                scope.answersUsers[answer.user.id] = answer.user;
-              }
-            }
           });
-          scope.answerUser = {user_id : ''};
-          scope.testCompare = function (actual, expected) {
-            console.log('hereee');
-            console.log(actual);
-            console.log(expected);
-          }
         }
         else {
           scope.answers = [];
