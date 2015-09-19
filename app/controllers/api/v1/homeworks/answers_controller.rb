@@ -6,14 +6,14 @@ class Api::V1::Homeworks::AnswersController < Api::V1::BaseController
 
   # GET /homeworks/homework_id/answers
   def index
-    @homeworksAnswers = HomeworkAnswer.where(homework_id: params[:homework_id])
+    @homeworksAnswers = HomeworkAnswer.where(homework_id: params[:homework_id]).order(created_at: :desc)
 
     render json: @homeworksAnswers, each_serializer: Api::V1::HomeworkAnswerSerializer
   end
 
   # GET /homeworks/homework_id/answers/user_id
   def show
-    @homeworksAnswers = HomeworkAnswer.where(homework_id: params[:homework_id], user_id: params[:id])
+    @homeworksAnswers = HomeworkAnswer.where(homework_id: params[:homework_id], user_id: params[:id]).order(created_at: :desc)
 
     render json: @homeworksAnswers, each_serializer: Api::V1::HomeworkAnswerSerializer
   end
